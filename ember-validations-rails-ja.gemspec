@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'ember-validations-rails/version'
+require 'ember-validations-rails-ja/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "ember-validations-rails"
-  spec.version       = EmberValidationsRails::VERSION
+  spec.name          = "ember-validations-rails-ja"
+  spec.version       = EmberValidationsRailsJa::VERSION
   spec.authors       = ["kozo yamagata"]
   spec.email         = ["tune002@gmail.com"]
-  spec.summary       = %q{Ember.js validation}
-  spec.description   = %q{Ember.js validation add on}
-  spec.homepage      = "https://github.com/halenohi/ember-validations-rails"
+  spec.summary       = %q{Ember.js validation (ja i18n)}
+  spec.description   = %q{Ember.js validation add on (hai18n)}
+  spec.homepage      = "https://github.com/halenohi/ember-validations-rails-ja"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
