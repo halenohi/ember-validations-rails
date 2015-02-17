@@ -109,17 +109,26 @@
     },
 
     TranslateableProperties: Ember.Mixin.create({
-      init: function() {
-        var result = this._super.apply(this, arguments);
+      _translationObserver: function(sender, propWithSuffix) {
+        var prop = propWithSuffix.replace(/Translation$/, '');
+        set(this, prop, I18n.t(this.get(propWithSuffix)));
+      },
+
+      _addTranslationObservers: function() {
         eachTranslatedAttribute(this, function(attribute, translation) {
-          this.addObserver(attribute + 'Translation', this, function(){
-            set(this, attribute, I18n.t(this.get(attribute + 'Translation')));
-          });
+          this.addObserver(attribute + 'Translation', this, this._translationObserver);
           set(this, attribute, translation);
         });
+      }.on('init'),
 
-        return result;
-      }
+      _removeTranslationObservers: function (){
+        eachTranslatedAttribute(this, function(attribute) {
+          var propWithSuffix = attribute + 'Translation';
+          if(this.hasObserverFor(propWithSuffix)) {
+            this.removeObserver(propWithSuffix, this._translationObserver);
+          }
+        });
+      }.on('willDestroyElement','willClearRender')
     }),
 
     TranslateableAttributes: Ember.Mixin.create({
@@ -138,22 +147,5 @@
   EmHandlebars.registerBoundHelper('t', function(key, options) {
     return new EmHandlebars.SafeString(I18n.t(key, options.hash));
   });
-
-  var attrHelperFunction = function(options) {
-    var attrs, result;
-    attrs = options.hash;
-    result = [];
-
-    Ember.keys(attrs).forEach(function(property) {
-      var translatedValue;
-      translatedValue = I18n.t(attrs[property]);
-      return result.push('%@="%@"'.fmt(property, translatedValue));
-    });
-
-    return new EmHandlebars.SafeString(result.join(' '));
-  };
-
-  EmHandlebars.registerHelper('translateAttr', attrHelperFunction);
-  EmHandlebars.registerHelper('ta', attrHelperFunction);
 
 }).call(undefined);
